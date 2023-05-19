@@ -1,0 +1,28 @@
+version: "3"
+services:
+  db_container:
+    container_name: db_container
+    image: mohamedsalama118/mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/data/db
+
+  #node api services
+  api:
+    build: ./app
+    ports:
+      - 80:3000
+    volumes:
+      - ./app/src:/app/src
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - MONGO_URL=mongodb://db_container:27017/e-commerce
+      - EMAIL=nars_qa@outlook.com
+      - EMAIL_PASSWORD=NARSsystem
+      - EXPIRES_IN=90d
+      - JWT_COOKIE_EXPIRES_IN=90
+      - JWT_SECRET=MY-JWT_SECRET-for-nodejs-and-express-and-mongodb
+    depends_on:
+      - db_container
