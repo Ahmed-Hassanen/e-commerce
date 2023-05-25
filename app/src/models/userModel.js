@@ -40,6 +40,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ["user", "admin"],
   },
+  // address: {
+  //   type: String,
+  //   required: [true, "user must have an address"],
+  // },
+  // phone: {
+  //   type: String,
+  //   required: [true, "user must have a phone"],
+  // },
 });
 
 userSchema.pre("save", async function (next) {
