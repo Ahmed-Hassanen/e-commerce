@@ -56,3 +56,24 @@ exports.verifyOrder = catchAsync(async (req, res, next) => {
     data: newOrder,
   });
 });
+
+exports.isOrderBuyer = catchAsync(async (req, res, next) => {
+  const orderId = req.params.orderId || req.params.id;
+  const order = await Order.findById(orderId);
+  if (!order) {
+    return next(new appError("No order found with that id", 404));
+  }
+
+  // console.log(req.user._id.toString(), order.buyer._id.toString());
+  if (order.done) {
+    return next(new appError("the order is already verified", 400));
+  }
+  if (req.user._id.toString() === order.buyer._id.toString()) {
+    return next();
+  }
+
+  return next(
+    new appError("this order doesn't belong to this logged in user", 401)
+  );
+  next();
+});
