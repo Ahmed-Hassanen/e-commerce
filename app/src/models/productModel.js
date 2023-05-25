@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
     type: String,
   },
   category: {
-    type: String,
+    type: mongoose.Schema.ObjectId,
     required: [true, "product must has a category"],
     ref: "Category",
   },
@@ -25,14 +25,16 @@ const productSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: [true, "product must has a quantity"],
-    min: 1,
+    min: 0,
   },
   seller: {
     type: mongoose.Schema.ObjectId,
+    required: [true, "product must has a seller"],
+    ref: "User",
   },
 });
 
-productSchema.pre(/^find/, function (next) {
+productSchema.pre(/^findOne/, function (next) {
   this.populate({ path: "category" });
 
   next();
