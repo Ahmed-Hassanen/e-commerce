@@ -7,7 +7,11 @@ const router = express.Router({ mergeParams: true });
 
 router
   .route("/")
-  .get(authController.protect, orderController.getAllOrders)
+  .get(
+    authController.protect,
+    productController.isProductSeller,
+    orderController.getAllOrders
+  )
   .post(
     authController.protect,
     orderController.setProductUserIds,
@@ -17,8 +21,17 @@ router
 router
   .route("/:id")
   .get(authController.protect, orderController.getOneOrder)
-  .patch(authController.protect, orderController.updateOrder)
-  .delete(authController.protect, orderController.deleteOrder);
+  .patch(
+    authController.protect,
+    orderController.isOrderBuyer,
+    orderController.checkOrderQuantity,
+    orderController.updateOrder
+  )
+  .delete(
+    authController.protect,
+    orderController.isOrderBuyer,
+    orderController.deleteOrder
+  );
 
 router
   .route("/:id/verify")
