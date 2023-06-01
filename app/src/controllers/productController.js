@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const Order = require("../models/orderModel");
 const handlerFactory = require("./handlerFactory");
 const catchAsync = require("../utils/catchAsync");
 const appError = require("../utils/appError");
@@ -10,7 +11,17 @@ exports.updateProduct = handlerFactory.updateOne(Product, "Product");
 exports.deleteProduct = handlerFactory.deleteOne(Product);
 
 exports.isProductSeller = catchAsync(async (req, res, next) => {
-  const productId = req.params.productId || req.params.id;
+  let productId;
+  if (req.params.productId) {
+    productId = req.params.productId;
+  } else {
+    const orderId = req.params.id;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return next(new appError("No order found with that id", 404));
+    }
+    productId = order.product;
+  }
   const product = await Product.findById(productId);
   if (!product) {
     return next(new appError("No product found with that id", 404));
