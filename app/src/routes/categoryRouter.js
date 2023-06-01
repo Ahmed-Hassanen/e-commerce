@@ -6,12 +6,24 @@ const router = express.Router();
 router
   .route("/")
   .get(categoryController.getAllCategories)
-  .post(authController.protect, categoryController.addCategory);
+  .post(
+    authController.protect,
+    authController.restrictTo("admin"),
+    categoryController.addCategory
+  );
 
 router
   .route("/:id")
   .get(categoryController.getCategory)
-  .patch(authController.protect, categoryController.updateCategory)
-  .delete(authController.protect, categoryController.deleteCategory);
+  .patch(
+    authController.protect,
+    authController.restrictTo("admin"),
+    categoryController.updateCategory
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo("admin"),
+    categoryController.deleteCategory
+  );
 
 module.exports = router;
