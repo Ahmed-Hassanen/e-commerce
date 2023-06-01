@@ -44,11 +44,6 @@ const productSchema = new mongoose.Schema(
   }
 );
 
-productSchema.virtual("orders", {
-  ref: "Order",
-  foreignField: "product",
-  localField: "_id",
-});
 productSchema.pre(/^findOne/, function (next) {
   this.populate({ path: "category" });
 
