@@ -3,52 +3,73 @@ const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
-const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  password: {
-    type: String,
-    minlength: 8,
-    select: false,
-  },
-  passwordConfirm: {
-    type: String,
-    validate: {
-      validator: function (el) {
-        return el === this.password;
-      },
-      message: "passwords are not the same",
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
     },
-  },
-  passwordChangedAt: Date,
-  email: {
-    type: String,
-    required: [true, "student must have an email"],
-    unique: [true, "the email is exist already"],
-    lowercase: true,
-    validate: [validator.isEmail, "please provide a valid email"],
-  },
-  photo: {
-    type: String,
-    default: "default.png",
-  },
+    password: {
+      type: String,
+      minlength: 8,
+      select: false,
+    },
+    passwordConfirm: {
+      type: String,
+      validate: {
+        validator: function (el) {
+          return el === this.password;
+        },
+        message: "passwords are not the same",
+      },
+    },
+    passwordChangedAt: Date,
+    email: {
+      type: String,
+      required: [true, "student must have an email"],
+      unique: [true, "the email is exist already"],
+      lowercase: true,
+      validate: [validator.isEmail, "please provide a valid email"],
+    },
+    photo: {
+      type: String,
+      default: "default.png",
+    },
 
-  verificationCode: String,
-  verificationCodeExpires: Date,
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    verificationCode: String,
+    verificationCodeExpires: Date,
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    // address: {
+    //   type: String,
+    //   required: [true, "user must have an address"],
+    // },
+    // phone: {
+    //   type: String,
+    //   required: [true, "user must have a phone"],
+    // },
   },
-  // address: {
-  //   type: String,
-  //   required: [true, "user must have an address"],
-  // },
-  // phone: {
-  //   type: String,
-  //   required: [true, "user must have a phone"],
-  // },
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
+  }
+);
+
+userSchema.virtual("orders", {
+  ref: "Order",
+  foreignField: "buyer",
+  localField: "_id",
+});
+userSchema.virtual("products", {
+  ref: "Product",
+  foreignField: "seller",
+  localField: "_id",
 });
 
 userSchema.pre("save", async function (next) {
