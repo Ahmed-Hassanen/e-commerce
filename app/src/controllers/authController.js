@@ -202,39 +202,29 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.restrictTo = (...roles) => {
-  return async (req, res, next) => {
+exports.restrictTo =
+  (...roles) =>
+  (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return next(
-        new AppError("You do not have permission to perform this action", 403)
+        new AppError("you do not have permission tp perform this action", 403)
       );
     }
-
-    let token;
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      token = req.headers.authorization.split(" ")[1];
-    } else if (req.cookies.jwt) {
-      token = req.cookies.jwt;
-    }
-
-    if (!token) {
-      return next(
-        new AppError("You are not logged in! Please log in to get access.", 401)
-      );
-    }
-
-    //check if this user is actually a staff member (to avoid students trying to get around this by passing a role)
-    const decoded = await promisify(JWT.verify)(token, process.env.JWT_SECRET);
-    const staffUser = await Staff.findById(decoded.id);
-    if (!staffUser || !roles.includes(staffUser.role)) {
-      return next(
-        new AppError("You do not have permission to perform this action", 403)
-      );
-    }
-
     next();
   };
-};
+
+exports.register = catchAsync(async (req, res, next) => {
+  if (!req.body.email) {
+    return next(new AppError("you should enter your email"));
+  }
+
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    role: req.body.role,
+  });
+
+  createSendToken(newUser, 201, req, res);
+});
