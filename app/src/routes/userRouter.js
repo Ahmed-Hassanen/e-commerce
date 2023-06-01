@@ -11,6 +11,7 @@ router.post("/signup", authController.signup);
 router.post("/verifyEmail", authController.verifyEmail);
 router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword", authController.verifyEmail);
+router.route("/me").get(authController.protect, userController.getMe);
 
 router
   .route("/")

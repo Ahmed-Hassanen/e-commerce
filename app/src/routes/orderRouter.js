@@ -18,6 +18,7 @@ router
     orderController.checkOrderQuantity,
     orderController.createOrder
   );
+
 router
   .route("/:id")
   .get(authController.protect, orderController.getOneOrder)
