@@ -37,8 +37,10 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-orderSchema.pre(/^find/, function (next) {
-  this.populate({ path: "buyer", select: "-__v -passwordChangedAt" });
+orderSchema.pre(/^findOne/, function (next) {
+  this.populate({ path: "buyer", select: "-__v -passwordChangedAt" }).populate(
+    "product"
+  );
   next();
 });
 
