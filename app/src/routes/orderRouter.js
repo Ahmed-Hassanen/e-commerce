@@ -21,16 +21,22 @@ router
 
 router
   .route("/:id")
-  .get(authController.protect, orderController.getOneOrder)
+  .get(
+    authController.protect,
+    orderController.isOrderBuyer,
+    orderController.getOneOrder
+  )
   .patch(
     authController.protect,
     orderController.isOrderBuyer,
+    orderController.isOrderDone,
     orderController.checkOrderQuantity,
     orderController.updateOrder
   )
   .delete(
     authController.protect,
     orderController.isOrderBuyer,
+    orderController.isOrderDone,
     orderController.deleteOrder
   );
 
