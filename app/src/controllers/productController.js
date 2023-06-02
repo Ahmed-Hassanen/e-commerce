@@ -6,7 +6,7 @@ const appError = require("../utils/appError");
 
 exports.addProduct = handlerFactory.createOne(Product, "Product");
 exports.getAllProducts = handlerFactory.getAll(Product);
-exports.getProduct = handlerFactory.getOne(Product);
+exports.getProduct = handlerFactory.getOne(Product, { path: "reviews" });
 exports.updateProduct = handlerFactory.updateOne(Product, "Product");
 exports.deleteProduct = handlerFactory.deleteOne(Product);
 

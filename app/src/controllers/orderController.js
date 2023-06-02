@@ -84,8 +84,6 @@ exports.isOrderBuyer = catchAsync(async (req, res, next) => {
   return next(
     new appError("this order doesn't belong to this logged in user", 401)
   );
-
-  next();
 });
 
 exports.isOrderDone = catchAsync(async (req, res, next) => {

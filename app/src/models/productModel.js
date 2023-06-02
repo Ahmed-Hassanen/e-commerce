@@ -33,6 +33,17 @@ const productSchema = new mongoose.Schema(
       required: [true, "product must has a seller"],
       ref: "User",
     },
+    ratingsAverage: {
+      type: Number,
+      default: 0,
+      min: [0, "Rating must me above 0.0"],
+      max: [5, "Rating must me below 5.0"],
+      set: (val) => Math.round(val * 10) / 10,
+    },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     toJSON: {
@@ -43,6 +54,11 @@ const productSchema = new mongoose.Schema(
     },
   }
 );
+productSchema.virtual("reviews", {
+  ref: "Review",
+  foreignField: "product",
+  localField: "_id",
+});
 
 productSchema.pre(/^findOne/, function (next) {
   this.populate({ path: "category" });
