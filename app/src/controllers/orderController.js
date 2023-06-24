@@ -19,7 +19,7 @@ exports.checkOrderQuantity = catchAsync(async (req, res, next) => {
     orderQuantity = req.body.quantity;
     productId = req.params.productId;
   } else {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.orderId);
     if (!order) {
       return next(new appError("No order found with that id", 404));
     }
@@ -43,7 +43,7 @@ exports.getOneOrder = handlerFactory.getOne(Order);
 exports.updateOrder = handlerFactory.updateOne(Order);
 exports.deleteOrder = handlerFactory.deleteOne(Order);
 exports.verifyOrder = catchAsync(async (req, res, next) => {
-  const order = await Order.findById(req.params.id);
+  const order = await Order.findById(req.params.orderId);
 
   if (!order) {
     return next(new appError("No order found with that id", 404));
@@ -84,8 +84,6 @@ exports.isOrderBuyer = catchAsync(async (req, res, next) => {
   return next(
     new appError("this order doesn't belong to this logged in user", 401)
   );
-
-  next();
 });
 
 exports.isOrderDone = catchAsync(async (req, res, next) => {

@@ -2,9 +2,20 @@ const express = require("express");
 const productController = require("../controllers/productController");
 const authController = require("../controllers/authController");
 const orderRouter = require("./orderRouter");
+const reviewRouter = require("./reviewRouter");
 const router = express.Router();
 
+router
+  .route("/images/:productId")
+  .post(
+    authController.protect,
+    productController.isProductSeller,
+    productController.uploadProductImages,
+    productController.saveProductImages
+  );
+
 router.use("/:productId/orders", orderRouter);
+router.use("/:productId/reviews", reviewRouter);
 
 router
   .route("/")

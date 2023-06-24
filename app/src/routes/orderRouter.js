@@ -41,7 +41,7 @@ router
   );
 
 router
-  .route("/:id/verify")
+  .route("/:orderId/verify")
   .patch(
     authController.protect,
     productController.isProductSeller,

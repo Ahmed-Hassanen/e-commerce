@@ -13,6 +13,14 @@ router.post("/forgotPassword", authController.forgotPassword);
 router.patch("/resetPassword", authController.verifyEmail);
 router.route("/me").get(authController.protect, userController.getMe);
 
+router.patch(
+  "/updateMe",
+  authController.protect,
+  userController.uploadUserPhoto,
+  //userController.resizeUserPhoto,
+  userController.updateMe
+);
+
 router
   .route("/")
   .get(
