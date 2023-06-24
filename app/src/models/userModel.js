@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      default: "default.png",
+      default: "https://res.cloudinary.com/dcghglxg0/image/upload/v1687618524/default_rhlric.png",
     },
 
     verificationCode: String,
