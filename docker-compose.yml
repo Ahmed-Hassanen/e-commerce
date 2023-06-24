@@ -2,7 +2,7 @@ version: "3"
 services:
   db_container:
     container_name: db_container
-    image: mohamedsalama118/mongo
+    image: mongo
     ports:
       - 27017:27017
     volumes:
@@ -24,5 +24,8 @@ services:
       - EXPIRES_IN=90d
       - JWT_COOKIE_EXPIRES_IN=90
       - JWT_SECRET=MY-JWT_SECRET-for-nodejs-and-express-and-mongodb
+      - CLOUDINARY_USER_NAME=dcghglxg0
+      - CLOUDINARY_API_KEY=595152961869745
+      - CLOUDINARY_API_SECRET=Ir6I1cgneaPQprY0Q0b2zs8b-VU
     depends_on:
       - db_container
