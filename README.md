@@ -34,7 +34,6 @@ This project is a full e‑commerce platform where users can browse products, ad
 | Backend | Node.js, Express.js |
 | Database | MongoDB |
 | ORM / ODM | Mongoose |
-| Frontend | React |
 | Authentication | JWT |
 | Dev / Ops | Docker, Docker Compose |
 
